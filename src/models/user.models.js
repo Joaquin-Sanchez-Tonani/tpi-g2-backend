@@ -1,6 +1,8 @@
-import { sequelize , DataTypes } from "../database/database";
+import { sequelize } from "../database/database.js";
+import { DataTypes } from 'sequelize';
+import { Roles } from "./role.models.js";
 
-const Users = sequelize.define(
+export const Users = sequelize.define(
     'Users',{
         id: {
             type: DataTypes.INTEGER,
@@ -21,10 +23,16 @@ const Users = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false
         },
-        lvl: { /* Exists 3 levels of permission: 1- Patients. 2- Specialist. 3- Admin. */
+        licenseNumber: { 
+            type: DataTypes.STRING, 
+            allowNull: true 
+        },
+        role_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: 1 /* Reference in admin-levels table */
+            references: { model: Roles, key: 'id' },
+            onDelete: 'CASCADE',  // si borrás el User, se borra el Specialist
+            onUpdate: 'CASCADE'   // si cambias el id del User, se actualiza aquí
         }
     }
 )
