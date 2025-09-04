@@ -9,7 +9,11 @@ export const Users = sequelize.define(
             primaryKey: true,
             autoIncrement: true
         },
-        username:{
+        name:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        lastName: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -24,8 +28,7 @@ export const Users = sequelize.define(
             allowNull: false
         },
         licenseNumber: { 
-            type: DataTypes.STRING, 
-            allowNull: true 
+            type: DataTypes.STRING
         },
         role_id: {
             type: DataTypes.INTEGER,

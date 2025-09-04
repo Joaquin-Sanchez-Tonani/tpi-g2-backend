@@ -1,13 +1,19 @@
+import { json } from "sequelize";
 import { Users } from "../models/user.models.js"
+import bs from 'bcrypt'
 
 async function Register(req, res) {
-    const { username, email, password, role } = req.body;
+    const { name, lastName, email, password, role } = req.body;
+    const hashedPassword = await bs.hash(password,6) 
+        .then(data => json(data))
+        .then(result => result.path)
     try {
         const [user, created] = await Users.findOrCreate({
             where: { email: email },
             defaults: {
-                username: username,
-                password: password,
+                name: name,
+                lastName: lastName,
+                password: hashedPassword,
                 role_id: role
             }
         });
