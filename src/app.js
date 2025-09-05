@@ -19,8 +19,7 @@ async function main() {
         app.listen(PORT, () => {
             console.log(`Server listening on port ${PORT}`)
         });
-        console.log('Connection has been established successfully.');
-
+        console.log("Connection has been established successfully to totilaflame's server.");    
     } catch (error) {
         console.error('Unable to connect to the database:', error);
     }
