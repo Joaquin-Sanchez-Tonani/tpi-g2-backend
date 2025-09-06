@@ -33,4 +33,9 @@ function Login(req,res){
     res.send("jjojo")
 }
 
-export {Login, Register};
+async function GetUser(req,res){
+    const users = await Users.findAll();
+    res.send(users)
+}
+
+export {Login, Register, GetUser};
