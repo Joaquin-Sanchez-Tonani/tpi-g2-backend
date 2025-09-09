@@ -4,10 +4,18 @@ import userRoutes from './routes/user.routes.js';
 import { sequelize } from './database/database.js';
 import './models/relations/relations.js'
 import { Roles } from './models/relations/relations.js';
+import cors from "cors";
+
 
 
 const app = express();
 app.use(express.json())
+
+app.use(cors({
+  origin: "http://localhost:5173", // permitir solo el frontend
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true
+}));
 
 async function main() {
     try {
