@@ -12,7 +12,7 @@ app.use(express.json())
 async function main() {
     try {
         await sequelize.authenticate();
-        await sequelize.sync({ force: true }); // Add { force: true } if you want to drop and recreate tables
+        await sequelize.sync(); // Add { force: true } if you want to drop and recreate tables
         await Roles.create({type: "Patient"})
         await Roles.create({type: "Specialist"})
         await Roles.create({type: "Admin"})
