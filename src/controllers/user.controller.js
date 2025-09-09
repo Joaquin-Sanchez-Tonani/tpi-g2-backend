@@ -1,5 +1,6 @@
 import { json } from "sequelize";
 import { Users } from "../models/user.models.js"
+import {jwtGenerator, jwtDecoded} from "../utils/jsonwebtoken.js"
 import bs from 'bcrypt'
 
 async function Register(req, res) {
@@ -29,8 +30,31 @@ async function Register(req, res) {
     }
 }
 
-function Login(req,res){
-    res.send("jjojo")
+async function Login(req,res){
+    const {email, password } = req.body;
+    var result = null;
+    var resultPassword = null;
+
+
+
+    try{
+        result = await Users.findOne({ where: { email : email }})
+        if(!result){throw new Error("Usuario inexistente")}
+    } catch(error){
+        console.log(error);
+        return res.status(401).json({"message" : "Usuario Inexistente", "ok": false});
+    }
+    try{
+        resultPassword = await bs.compare(password,result.password)
+        if(!resultPassword){throw new Error("Contraseña Invalida")}
+    } catch(error){
+        console.log(error);
+        return res.status(401).json({"message" : "Contraseña Invalida", "ok": false});
+    }
+    
+    const token =  jwtGenerator(result);
+    res.json({"token": token, "message": "Bienvenido", "ok": true})
+   //res.send(jwtDecoded(token))
 }
 
 async function GetUser(req,res){

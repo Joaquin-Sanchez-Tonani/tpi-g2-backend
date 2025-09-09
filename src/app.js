@@ -4,15 +4,23 @@ import userRoutes from './routes/user.routes.js';
 import { sequelize } from './database/database.js';
 import './models/relations/relations.js'
 import { Roles } from './models/relations/relations.js';
+import cors from "cors";
+
 
 
 const app = express();
 app.use(express.json())
 
+app.use(cors({
+  origin: "http://localhost:5173", // permitir solo el frontend
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true
+}));
+
 async function main() {
     try {
         await sequelize.authenticate();
-        await sequelize.sync({ force: true }); // Add { force: true } if you want to drop and recreate tables
+        //await sequelize.sync({ force: true }); // Add { force: true } if you want to drop and recreate tables
         await Roles.create({type: "Patient"})
         await Roles.create({type: "Specialist"})
         await Roles.create({type: "Admin"})
