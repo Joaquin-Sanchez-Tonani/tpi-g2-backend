@@ -3,8 +3,11 @@ import { PORT } from './config.js';
 import userRoutes from './routes/user.routes.js';
 import { sequelize } from './database/database.js';
 import './models/relations/relations.js'
-import { Roles } from './models/relations/relations.js';
+import { roles } from './utils/roles.data.js';
 import cors from "cors";
+import { Roles } from './models/relations/relations.js';
+import specialtiesRouter from './routes/specialties.routes.js';
+import dashboardRouter from './routes/dashboard.routes.js';
 
 
 
@@ -21,9 +24,17 @@ async function main() {
     try {
         await sequelize.authenticate();
         await sequelize.sync(); // Add { force: true } if you want to drop and recreate tables
-        await Roles.create({type: "Patient"})
-        await Roles.create({type: "Specialist"})
-        await Roles.create({type: "Admin"})
+        for( const rol of roles ){
+            const [data, isCreated] = await Roles.findOrCreate({
+                where: {type: rol.type},
+                defaults: rol
+            })
+            if(isCreated){
+                console.log(`Role creado. ${data.type}`)
+            }else{
+                console.log(`Role ya existente. ${data.type}`)               
+            }
+        }
         app.listen(PORT, () => {
             console.log(`Server listening on port ${PORT}`)
         });
@@ -36,3 +47,5 @@ async function main() {
 main();
 
 app.use("/auth", userRoutes)
+app.use("/appointment", specialtiesRouter)
+app.use("/dashboard", dashboardRouter)
