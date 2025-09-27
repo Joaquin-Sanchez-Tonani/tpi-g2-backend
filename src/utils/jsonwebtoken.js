@@ -13,7 +13,7 @@ const jwtGenerator = (result) => {
     role_id: role_id,
   }
 
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "0.5h" })
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1m" })
 
 }
 
@@ -25,7 +25,7 @@ const jwtDecoded = (req,res,token) => {
     console.log("Verificado:", decoded);
     return decoded
   } catch (err) {
-    console.error("Token inválido");
+    res.status(403).json({message: "Token inválido", ok: false})
   }
 
 }

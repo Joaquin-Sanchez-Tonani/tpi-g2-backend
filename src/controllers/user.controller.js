@@ -99,4 +99,8 @@ async function PatchUser(req,res){
     }
 }
 
-export {Login, Register, GetUser, DeleteUser, PatchUser};
+async function ValidateUser(req,res){
+    res.status(200).json({message: "Usuario permitido", ok: true})
+}
+
+export {Login, Register, GetUser, DeleteUser, PatchUser, ValidateUser};
