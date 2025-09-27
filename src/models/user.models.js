@@ -33,6 +33,7 @@ export const Users = sequelize.define(
         role_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 1,
             references: { model: Roles, key: 'id' },
             onDelete: 'CASCADE',  // si borrás el User, se borra el Specialist
             onUpdate: 'CASCADE'   // si cambias el id del User, se actualiza aquí

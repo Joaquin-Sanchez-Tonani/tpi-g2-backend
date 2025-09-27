@@ -12,6 +12,10 @@ export const Appointments = sequelize.define(
             type: DataTypes.DATE,
             allowNull: false
         },
+        schedule: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         patient_id: {
             type: DataTypes.INTEGER,
             allowNull: false,

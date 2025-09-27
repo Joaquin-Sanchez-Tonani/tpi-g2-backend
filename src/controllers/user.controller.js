@@ -4,7 +4,7 @@ import {jwtGenerator, jwtDecoded} from "../utils/jsonwebtoken.js"
 import bs from 'bcrypt'
 
 async function Register(req, res) {
-    const { name, lastName, email, password, role } = req.body;
+    const { name, lastName, email, password} = req.body;
     const hashedPassword = await bs.hash(password,6) 
         .then(data => json(data))
         .then(result => result.path)
@@ -14,8 +14,7 @@ async function Register(req, res) {
             defaults: {
                 name: name,
                 lastName: lastName,
-                password: hashedPassword,
-                role_id: role
+                password: hashedPassword
             }
         });
 

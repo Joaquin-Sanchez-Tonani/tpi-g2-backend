@@ -1,5 +1,15 @@
 import { Specialties } from "../models/specialties.models.js"
 
+
+async function GetSpecialties(req,res){
+    try{
+        const specialties = await Specialties.findAll()
+        res.status(200).json({ message: "Especialidades encontradas", ok: true, specialties})
+    }catch(e){
+        console.log("Error getting specialties: ", e)
+    }
+}
+
 async function CreateSpecialty(req,res){
     const result = req.body
     try{
@@ -27,4 +37,4 @@ async function DeleteSpecialty(req,res){
     }
 }
 
-export {CreateSpecialty, DeleteSpecialty}
+export {GetSpecialties, CreateSpecialty, DeleteSpecialty}

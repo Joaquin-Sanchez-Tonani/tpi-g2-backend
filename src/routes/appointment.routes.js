@@ -1,9 +1,9 @@
 import { Router } from "express";
 
-import Appointment from "../controllers/appointment.controller.js";
+import {GetSpecialties} from "../controllers/specialties.controller.js";
 
-const router = Router();
+const appointmentRouter = Router();
 
-router.get("/turnos", Appointment);
+appointmentRouter.get("/specialties", GetSpecialties);
 
-export default router;
+export default appointmentRouter;

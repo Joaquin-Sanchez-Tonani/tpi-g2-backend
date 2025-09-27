@@ -1,13 +1,13 @@
 import express from 'express';
 import { PORT } from './config.js';
-import userRoutes from './routes/user.routes.js';
 import { sequelize } from './database/database.js';
 import './models/relations/relations.js'
 import { roles } from './utils/roles.data.js';
 import cors from "cors";
 import { Roles } from './models/relations/relations.js';
-import specialtiesRouter from './routes/specialties.routes.js';
 import dashboardRouter from './routes/dashboard.routes.js';
+import appointmentRouter from './routes/appointment.routes.js';
+import authRouter from './routes/auth.routes.js';
 
 
 
@@ -46,6 +46,6 @@ async function main() {
 
 main();
 
-app.use("/auth", userRoutes)
-app.use("/appointment", specialtiesRouter)
+app.use("/auth", authRouter)
+app.use("/appointment", appointmentRouter)
 app.use("/dashboard", dashboardRouter)
