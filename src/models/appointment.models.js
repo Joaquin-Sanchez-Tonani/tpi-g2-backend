@@ -11,7 +11,7 @@ export const Appointments = sequelize.define(
             autoIncrement: true
         },
         date: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING,
             allowNull: false
         },
         time_id: {

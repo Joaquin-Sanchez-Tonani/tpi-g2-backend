@@ -12,18 +12,22 @@ async function GetTimes(req,res){
     }
 }
 
-async function GetBusyAppointment(req,res){
-    const body = req.body
-    if(!body) return res.status(400).json({ message: "Falta el date seleccionado", ok: false });
-    try{
+async function GetBusyAppointment(req, res) {
+    const { date, specialist_id } = req.query;
+    if (!date || !specialist_id) {
+        return res.status(400).json({ message: "Faltan parámetros", ok: false });
+    }
+    try {
         const result = await Appointments.findAll({
-            where: {date : body.date,
-                specialist_id: body.specialist_id
-            }
-        })
-        if(result.length > 0) return res.status(200).json({message: "Turnos encontrados", ok: true, appointments: result})
-        else return res.status(404).json({message: "No se encontraron turnos", ok: false})
-    }catch(e){
+            where: { date, specialist_id }
+        });
+
+        if (result.length > 0) {
+            return res.status(200).json({ message: "Turnos encontrados", ok: true, appointments: result });
+        } else {
+            return res.status(200).json({ message: "No se encontraron turnos", ok: false, appointments: result });
+        }
+    } catch (e) {
         console.error("GetBusyAppointment error:", e);
         return res.status(500).json({ message: "Error interno del servidor", ok: false });
     }

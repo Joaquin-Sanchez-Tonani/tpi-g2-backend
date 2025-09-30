@@ -8,7 +8,7 @@ const appointmentRouter = Router();
 
 appointmentRouter.get("/specialties", GetSpecialties);
 appointmentRouter.get("/specialists/:id", GetSpecialists)
-appointmentRouter.get("/busy_appointment", GetBusyAppointment)
+appointmentRouter.get("/busy", GetBusyAppointment)
 appointmentRouter.get("/times", GetTimes)
 appointmentRouter.post("/create", CreateAppointment)
 

@@ -1,5 +1,5 @@
 export const PORT = 3000;
-
+import bs from 'bcrypt'
 export const harcodeData = async (model, list, attribute, message, error) => {
     for (const item of list) {
         const whereCondition = {};
@@ -18,11 +18,21 @@ export const harcodeData = async (model, list, attribute, message, error) => {
     }
 };
 
-export const harcodeUsers = async (model,users) => {
+
+export const harcodeUsers = async (model, users) => {
+
   for (const user of users) {
+      var hashedPassword = await bs.hash(user.password, 6);
     const [data, isCreated] = await model.findOrCreate({
-      where: { email: user.email }, 
-      defaults: user                
+      where: { email: user.email },
+      defaults: {
+        name: user.name,
+        lastName: user.lastName,
+        licenseNumber: user.licenseNumber || null,
+        specialty_id: user.specialty_id || null,
+        role_id: user.role_id || 1,
+        password: hashedPassword
+      }
     });
 
     if (isCreated) {
@@ -32,3 +42,4 @@ export const harcodeUsers = async (model,users) => {
     }
   }
 };
+
