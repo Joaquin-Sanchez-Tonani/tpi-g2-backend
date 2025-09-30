@@ -1,6 +1,7 @@
 import { sequelize } from "../database/database.js";
 import { DataTypes } from 'sequelize';
 import { Roles } from "./role.models.js";
+import { Specialties } from "./specialties.models.js";
 
 export const Users = sequelize.define(
     'Users',{
@@ -28,15 +29,23 @@ export const Users = sequelize.define(
             allowNull: false
         },
         licenseNumber: { 
-            type: DataTypes.STRING
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        specialty_id: { 
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: { model: Specialties, key: 'id' },
+            onDelete: 'SET NULL',  
+            onUpdate: 'CASCADE'   
         },
         role_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 1,
             references: { model: Roles, key: 'id' },
-            onDelete: 'CASCADE',  // si borrás el User, se borra el Specialist
-            onUpdate: 'CASCADE'   // si cambias el id del User, se actualiza aquí
+            onDelete: 'SET DEFAULT',  
+            onUpdate: 'CASCADE'   
         }
     }
 )

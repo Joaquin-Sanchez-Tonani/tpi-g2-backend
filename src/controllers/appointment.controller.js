@@ -1,0 +1,54 @@
+import { Appointments } from "../models/appointment.models.js";
+import { Times } from "../models/time.models.js"
+
+async function GetTimes(req,res){
+    try{
+        const result = await Times.findAll()
+        if(!result) return res.status(404).json({message: "No hay horarios existentes", ok: false})
+        else return res.status(200).json({message: "Horarios encontrados", ok: true, times: result})
+    }catch(e){
+        console.log("GetTimes error: ",e)
+        return res.status(500).json({ message: "Error interno del servidor", ok: false });
+    }
+}
+
+async function GetBusyAppointment(req,res){
+    const body = req.body
+    if(!body) return res.status(400).json({ message: "Falta el date seleccionado", ok: false });
+    try{
+        const result = await Appointments.findAll({
+            where: {date : body.date,
+                specialist_id: body.specialist_id
+            }
+        })
+        if(result.length > 0) return res.status(200).json({message: "Turnos encontrados", ok: true, appointments: result})
+        else return res.status(404).json({message: "No se encontraron turnos", ok: false})
+    }catch(e){
+        console.error("GetBusyAppointment error:", e);
+        return res.status(500).json({ message: "Error interno del servidor", ok: false });
+    }
+}
+
+async function CreateAppointment(req,res){
+    const {date,time_id,specialist_id,patient_id} = req.body
+    if(!date || !time_id || !specialist_id || !patient_id) return res.status(400).json({ message: "Faltan seleccionar datos", ok: false });
+    try{
+        const [data,isCreated] = await Appointments.findOrCreate({
+            where: {date : date,
+                time_id: time_id,
+                specialist_id: specialist_id,
+                patient_id: patient_id
+            },
+            defaults: {
+
+            }
+        })
+        if(isCreated) return res.status(200).json({message: "Turnos creado", ok: true, appointments: data})
+        else return res.status(404).json({message: "Turno existente", ok: false})
+    }catch(e){
+        console.error("CreateAppointment error:", e);
+        return res.status(500).json({ message: "Error interno del servidor", ok: false });
+    }
+}
+
+export {GetTimes, GetBusyAppointment, CreateAppointment}

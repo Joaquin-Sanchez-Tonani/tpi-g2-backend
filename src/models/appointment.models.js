@@ -1,5 +1,7 @@
-import { sequelize } from "../database/database";
+import { sequelize } from "../database/database.js";
 import { DataTypes } from "sequelize";
+import { Times } from "./time.models.js";
+import { Users } from "./user.models.js";
 
 export const Appointments = sequelize.define(
     'Appointments',{
@@ -8,23 +10,24 @@ export const Appointments = sequelize.define(
             primaryKey: true,
             autoIncrement: true
         },
-        day: {
+        date: {
             type: DataTypes.DATE,
             allowNull: false
         },
-        schedule: {
+        time_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            references: { model: Times, key: 'id' }
         },
         patient_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            references: { model: Users, key: id }
+            references: { model: Users, key: 'id' }
         },
         specialist_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            references: { model: Users, key: id }
+            references: { model: Users, key: 'id' }
         }
     }
 )

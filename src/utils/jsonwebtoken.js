@@ -13,7 +13,7 @@ const jwtGenerator = (result) => {
     role_id: role_id,
   }
 
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1m" })
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "0.5h" })
 
 }
 

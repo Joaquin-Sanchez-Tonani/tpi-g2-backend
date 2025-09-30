@@ -1,9 +1,15 @@
 import { Router } from "express";
 
 import {GetSpecialties} from "../controllers/specialties.controller.js";
+import { GetSpecialists } from "../controllers/specialists.controller.js";
+import { CreateAppointment, GetBusyAppointment, GetTimes } from "../controllers/appointment.controller.js";
 
 const appointmentRouter = Router();
 
 appointmentRouter.get("/specialties", GetSpecialties);
+appointmentRouter.get("/specialists/:id", GetSpecialists)
+appointmentRouter.get("/busy_appointment", GetBusyAppointment)
+appointmentRouter.get("/times", GetTimes)
+appointmentRouter.post("/create", CreateAppointment)
 
 export default appointmentRouter;

@@ -1,106 +1,102 @@
-import { json } from "sequelize";
-import { Users } from "../models/user.models.js"
-import {jwtGenerator, jwtDecoded} from "../utils/jsonwebtoken.js"
-import bs from 'bcrypt'
+import { Users } from "../models/user.models.js";
+import { jwtGenerator } from "../utils/jsonwebtoken.js";
+import bs from "bcrypt";
 
 async function Register(req, res) {
-    const { name, lastName, email, password} = req.body;
-    const hashedPassword = await bs.hash(password,6) 
-        .then(data => json(data))
-        .then(result => result.path)
+    const { name, lastName, email, password } = req.body;
+    if (!name || !lastName || !email || !password) {
+        return res.status(400).json({ message: "Faltan datos obligatorios", ok: false });
+    }
     try {
+        const hashedPassword = await bs.hash(password, 6);
         const [user, created] = await Users.findOrCreate({
-            where: { email: email },
-            defaults: {
-                name: name,
-                lastName: lastName,
-                password: hashedPassword
-            }
+            where: { email },
+            defaults: { name, lastName, password: hashedPassword }
         });
 
-        if (created) {
-            res.status(200).json({message : "Usuario creado correctamente", ok : true});
-        } else {
-            res.status(400).json({message : `Ya existe un usuario con ese email. --${user.email}--`, ok : false});
+        if (!created) {
+            return res.status(200).json({ message: `Ya existe un usuario con ese email --${user.email}--`, ok: false });
         }
+        return res.status(201).json({ message: "Usuario creado correctamente", ok: true });
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Error en el servidor");
+        console.error("Error registering user:", error);
+        return res.status(500).json({ message: "Error interno del servidor", ok: false });
     }
 }
 
-async function Login(req,res){
-    const {email, password } = req.body;
-    var result = null;
-    var resultPassword = null;
-    try{
-        result = await Users.findOne({ where: { email : email }})
-        if(!result){throw new Error("Usuario inexistente")}
-    } catch(error){
-        console.log(error);
-        return res.status(401).json({message : "Usuario Inexistente", ok: false});
+async function Login(req, res) {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ message: "Faltan credenciales", ok: false });
     }
-    try{
-        resultPassword = await bs.compare(password,result.password)
-        if(!resultPassword){throw new Error("Contraseña Invalida")}
-    } catch(error){
-        console.log(error);
-        return res.status(401).json({message : "Contraseña Invalida", ok: false});
+    try {
+        const user = await Users.findOne({ where: { email } });
+        if (!user) {
+            return res.status(401).json({ message: "Usuario inexistente", ok: false });
+        }
+
+        const validPassword = await bs.compare(password, user.password);
+        if (!validPassword) {
+            return res.status(401).json({ message: "Contraseña inválida", ok: false });
+        }
+
+        const token = jwtGenerator(user);
+        return res.status(200).json({ token, message: "Bienvenido", ok: true });
+    } catch (error) {
+        console.error("Error logging in:", error);
+        return res.status(500).json({ message: "Error interno del servidor", ok: false });
     }
-    
-    const token =  jwtGenerator(result);
-    res.json({token: token, message: "Bienvenido", ok: true})
 }
 
-async function GetUser(req,res){
-    try{
+async function GetUser(req, res) {
+    try {
         const users = await Users.findAll();
-        res.status(200).json({ message: "Usuarios encontrados", ok: true, users: {users}})
-    }catch(e){
-        console.log("Error fetching users: ", e)
+        return res.status(200).json({ message: "Usuarios encontrados", ok: true, users: users });
+    } catch (e) {
+        console.error("Error fetching users:", e);
+        return res.status(500).json({ message: "Error interno del servidor", ok: false });
     }
 }
 
-async function DeleteUser(req,res) {
-    const id = req.params.id
-    if(id == req.user.id) return res.status(403).json({message: "No podes borrarte a vos mismo"})
-    try{
-        const deleted = await Users.destroy({
-            where: {id : id},
-            force: true
-        })
-        if(!deleted){
-            res.status(404).json({message: "Usuario no encontrado", ok: false})
+async function DeleteUser(req, res) {
+    const id = req.params.id;
+    if (id == req.user.id) {
+        return res.status(403).json({ message: "No puedes borrarte a ti mismo", ok: false });
+    }
+    try {
+        const deleted = await Users.destroy({ where: { id }, force: true });
+        if (!deleted) {
+            return res.status(404).json({ message: "Usuario no encontrado", ok: false });
         }
-        res.status(200).json({ message: "Usuario eliminado correctamente", ok: true });
-    }catch(e){
-        console.log("Error deleting user: ", e)
+        return res.status(200).json({ message: "Usuario eliminado correctamente", ok: true });
+    } catch (e) {
+        console.error("Error deleting user:", e);
+        return res.status(500).json({ message: "Error interno del servidor", ok: false });
     }
 }
 
-async function PatchUser(req,res){
-    const user_id = req.params.id
-    const role_id = req.body.role_id
-    try{
-        const modified = await Users.update(
-            {role_id : role_id},
-            {
-                where: {
-                    id : user_id
-                }
-            }
-        )
-        if(modified == 0){
-            res.status(404).json({message: "Usuario no encontrado", ok: false})
+async function PatchUser(req, res) {
+    const user_id = req.params.id;
+    const body = req.body;
+    try {
+        const updates = {};
+        if (body.role_id !== undefined) updates.role_id = body.role_id;
+        if (body.specialty_id !== undefined) updates.specialty_id = body.specialty_id;
+        if (body.licenseNumber !== undefined) updates.licenseNumber = body.licenseNumber;
+
+        const [modified] = await Users.update(updates, { where: { id: user_id } });
+        if (modified === 0) {
+            return res.status(404).json({ message: "Usuario no encontrado", ok: false });
         }
-        res.status(200).json({ message: "Usuario modificado correctamente", ok: true });
-    }catch(e){
-        console.log("Error modifying user: ", e)
+        return res.status(200).json({ message: "Usuario modificado correctamente", ok: true });
+    } catch (e) {
+        console.error("Error modifying user:", e);
+        return res.status(500).json({ message: "Error modificando usuario", ok: false });
     }
 }
 
-async function ValidateUser(req,res){
-    res.status(200).json({message: "Usuario permitido", ok: true})
+async function ValidateUser(req, res) {
+    return res.status(200).json({ message: "Usuario permitido", ok: true });
 }
 
-export {Login, Register, GetUser, DeleteUser, PatchUser, ValidateUser};
+export { Login, Register, GetUser, DeleteUser, PatchUser, ValidateUser };

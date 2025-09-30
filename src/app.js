@@ -1,15 +1,16 @@
 import express from 'express';
-import { PORT } from './config.js';
+import { harcodeData, harcodeUsers, PORT } from './config/config.js';
 import { sequelize } from './database/database.js';
 import './models/relations/relations.js'
 import { roles } from './utils/roles.data.js';
 import cors from "cors";
-import { Roles } from './models/relations/relations.js';
+import { Roles, Specialties, Times, Users } from './models/relations/relations.js';
 import dashboardRouter from './routes/dashboard.routes.js';
 import appointmentRouter from './routes/appointment.routes.js';
 import authRouter from './routes/auth.routes.js';
-
-
+import { times } from './utils/time.data.js';
+import { specialties } from './utils/specialties.data.js';
+import { users } from './utils/users.data.js';
 
 const app = express();
 app.use(express.json())
@@ -24,17 +25,10 @@ async function main() {
     try {
         await sequelize.authenticate();
         await sequelize.sync(); // Add { force: true } if you want to drop and recreate tables
-        for( const rol of roles ){
-            const [data, isCreated] = await Roles.findOrCreate({
-                where: {type: rol.type},
-                defaults: rol
-            })
-            if(isCreated){
-                console.log(`Role creado. ${data.type}`)
-            }else{
-                console.log(`Role ya existente. ${data.type}`)               
-            }
-        }
+        await harcodeData(Roles, roles, "type", "Role creado.", "Role ya existente.");
+        await harcodeData(Times, times, "time", "Horario creado.", "Horario ya existente.");
+        await harcodeData(Specialties, specialties, "specialty", "Especialidad creada.", "Especialidad ya existente.");
+        await harcodeUsers(Users,users)
         app.listen(PORT, () => {
             console.log(`Server listening on port ${PORT}`)
         });
