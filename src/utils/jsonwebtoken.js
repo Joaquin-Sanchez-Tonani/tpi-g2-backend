@@ -17,17 +17,13 @@ const jwtGenerator = (result) => {
 
 }
 
-const jwtDecoded = (req,res,token) => {
-
+const jwtDecoded = (token) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded
-    console.log("Verificado:", decoded);
-    return decoded
+    return decoded;
   } catch (err) {
-    res.status(403).json({message: "Token inválido", ok: false})
+    return null;
   }
-
 }
 
 export { jwtDecoded, jwtGenerator }
