@@ -41,7 +41,7 @@ async function Login(req, res) {
         }
 
         const token = jwtGenerator(user);
-        return res.status(200).json({ token, message: "Bienvenido", ok: true });
+        return res.status(200).json({ token, message: "Bienvenido", ok: true, user: {name: user.name, lastName: user.lastName}});
     } catch (error) {
         console.error("Error logging in:", error);
         return res.status(500).json({ message: "Error interno del servidor", ok: false });
@@ -77,13 +77,13 @@ async function DeleteUser(req, res) {
 
 async function PatchUser(req, res) {
     const user_id = req.params.id;
-    const body = req.body;
+    const body = req.body || req;
     try {
         const updates = {};
         if (body.role_id !== undefined) updates.role_id = body.role_id;
         if (body.specialty_id !== undefined) updates.specialty_id = body.specialty_id;
         if (body.licenseNumber !== undefined) updates.licenseNumber = body.licenseNumber;
-
+        if (Object.values(updates).length === 0) return res.status(400).json({ message: "No hay información a modificar", ok: false })
         const [modified] = await Users.update(updates, { where: { id: user_id } });
         if (modified === 0) {
             return res.status(404).json({ message: "Usuario no encontrado", ok: false });

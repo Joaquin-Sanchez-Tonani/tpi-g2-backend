@@ -1,5 +1,6 @@
 export const specialties = [
   { "specialty": "Cardiología", "description": "Estudio y tratamiento del corazón." },
+  { "specialty": "Cardiología", "description": "Estudio y tratamiento del corazón." },
   { "specialty": "Dermatología", "description": "Cuidado y tratamiento de la piel." },
   { "specialty": "Neurología", "description": "Diagnóstico y tratamiento de enfermedades del sistema nervioso." },
   { "specialty": "Pediatría", "description": "Atención médica de niños y adolescentes." },

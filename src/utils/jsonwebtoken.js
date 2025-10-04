@@ -9,7 +9,7 @@ const jwtGenerator = (result) => {
   const payload = {
     id: id,
     name: name,
-    lastName, lastName,
+    lastName: lastName,
     role_id: role_id,
   }
 

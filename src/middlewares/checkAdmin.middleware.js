@@ -11,7 +11,7 @@ export function CheckAdmin(req,res,next){
     const permission = tokenDecoded && tokenDecoded.role_id
     const necessary_level = 3
     if(permission < necessary_level){
-        return res.status(403).send("Usuario no autorizado")
+        return res.status(403).json({message: "Usuario no autorizado", ok: false})
     }
     next()
 }
