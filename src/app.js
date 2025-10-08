@@ -4,13 +4,14 @@ import { sequelize } from './database/database.js';
 import './models/relations/relations.js'
 import { roles } from './utils/roles.data.js';
 import cors from "cors";
-import { Roles, Specialties, Times, Users } from './models/relations/relations.js';
+import { Roles, Specialties, Times, Users, Appointments } from './models/relations/relations.js';
 import dashboardRouter from './routes/dashboard.routes.js';
 import appointmentRouter from './routes/appointment.routes.js';
 import authRouter from './routes/auth.routes.js';
 import { times } from './utils/time.data.js';
 import { specialties } from './utils/specialties.data.js';
 import { users } from './utils/users.data.js';
+import { appointment } from './utils/appointment.data.js';
 
 const app = express();
 app.use(express.json())
@@ -29,6 +30,7 @@ async function main() {
         await harcodeData(Times, times, "time", "Horario creado.", "Horario ya existente.");
         await harcodeData(Specialties, specialties, "specialty", "Especialidad creada.", "Especialidad ya existente.");
         await harcodeUsers(Users,users)
+        // await harcodeData(Appointments, appointment, "appointmen", "appointmen creado", "appointmen ya existente");
         app.listen(PORT, () => {
             console.log(`Server listening on port ${PORT}`)
         });
