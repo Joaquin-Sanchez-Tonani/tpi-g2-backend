@@ -33,7 +33,7 @@ export function isLogin(req, res) {
         }
 
         req.user = decoded; // opcional, para usar info del usuario
-        return res.status(200).json({ message: "Permitido", ok: true, user: decoded });
+        return res.status(200).json({ message: "Permitido", ok: true });
 
     } catch (error) {
         return res.status(500).json({ message: "Error en servidor", ok: false });
