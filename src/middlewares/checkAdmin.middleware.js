@@ -26,7 +26,7 @@ export function isLogin(req, res) {
             return res.status(401).json({ message: "Usuario no logeado", ok: false });
         }
 
-        const decoded = jwtDecoded(token);
+        const decoded = jwtDecoded(req,res,token);
 
         if (!decoded) {
             return res.status(401).json({ message: "Token inválido", ok: false });
