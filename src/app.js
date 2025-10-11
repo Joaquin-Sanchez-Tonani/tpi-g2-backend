@@ -25,7 +25,7 @@ app.use(cors({
 async function main() {
     try {
         await sequelize.authenticate();
-        await sequelize.sync();  //{ force: true } 
+        await sequelize.sync();  { force: true } 
         await harcodeData(Roles, roles, "type", "Role creado.", "Role ya existente.");
         await harcodeData(Times, times, "time", "Horario creado.", "Horario ya existente.");
         await harcodeData(Specialties, specialties, "specialty", "Especialidad creada.", "Especialidad ya existente.");
