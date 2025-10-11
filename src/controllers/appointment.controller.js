@@ -40,11 +40,10 @@ async function CreateAppointment(req,res){
         const [data,isCreated] = await Appointments.findOrCreate({
             where: {date : date,
                 time_id: time_id,
-                specialist_id: specialist_id,
-                patient_id: patient_id
+                specialist_id: specialist_id
             },
             defaults: {
-
+                patient_id: patient_id
             }
         })
         if(isCreated) return res.status(200).json({message: "Turnos creado", ok: true, appointments: data})
