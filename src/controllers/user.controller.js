@@ -41,7 +41,7 @@ async function Login(req, res) {
         }
 
         const token = jwtGenerator(user);
-        return res.status(200).json({ token, message: "Bienvenido", ok: true, user: {id: user.id,name: user.name, lastName: user.lastName}});
+        return res.status(200).json({ token, message: "Bienvenido", ok: true, user: {id: user.id,name: user.name, lastName: user.lastName, email: user.email}});
     } catch (error) {
         console.error("Error logging in:", error);
         return res.status(500).json({ message: "Error interno del servidor", ok: false });
