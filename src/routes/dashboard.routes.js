@@ -5,12 +5,12 @@ import { CheckAdmin } from "../middlewares/checkAdmin.middleware.js";
 
 const dashboardRouter = Router()
 
-dashboardRouter.post("/specialty", CreateSpecialty)
-dashboardRouter.delete("/specialty", DeleteSpecialty)
+dashboardRouter.post("/specialty",CheckAdmin, CreateSpecialty)
+dashboardRouter.delete("/specialty",CheckAdmin, DeleteSpecialty)
 
-dashboardRouter.get("/users", GetUser)
-dashboardRouter.delete("/users/:id", DeleteUser)
-dashboardRouter.patch("/users/:id", PatchUser)
+dashboardRouter.get("/users",CheckAdmin, GetUser)
+dashboardRouter.delete("/users/:id",CheckAdmin, DeleteUser)
+dashboardRouter.patch("/users/:id",CheckAdmin, PatchUser)
 
 export default dashboardRouter
 
