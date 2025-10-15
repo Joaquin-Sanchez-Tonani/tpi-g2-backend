@@ -95,7 +95,7 @@ async function PatchUser(req, res) {
     }
 }
 
-async function ValidateUser(req, res) {
+async function ValidateUser(_, res) {
     return res.status(200).json({ message: "Usuario permitido", ok: true });
 }
 

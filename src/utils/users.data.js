@@ -63,7 +63,7 @@ export const users = [
     { "name": "Admin2", "lastName": "Control", "email": "admin2@mail.com", "password": "admin123", "licenseNumber": null, "specialty_id": null, "role_id": 3 },
     { "name": "Admin3", "lastName": "Control", "email": "admin3@mail.com", "password": "admin123", "licenseNumber": null, "specialty_id": null, "role_id": 3 },
 
-    { "name": "Laura", "lastName": "Sánchez", "email": "laura.sanchez@mail.com", "password": "pass123", "licenseNumber": null, "specialty_id": null, "role_id": 1 },
+    { "name": "Laura", "lastName": "Sánchez", "email": "laura.sanchez@mail.com", "password": "pass123456", "licenseNumber": null, "specialty_id": null, "role_id": 1 },
     { "name": "Fernando", "lastName": "Gil", "email": "fernando.gil@mail.com", "password": "pass123", "licenseNumber": null, "specialty_id": null, "role_id": 1 },
     { "name": "Marcos", "lastName": "Nuñez", "email": "marcos.nunez@mail.com", "password": "pass123", "licenseNumber": null, "specialty_id": null, "role_id": 1 },
     { "name": "Camila", "lastName": "Herrera", "email": "camila.herrera@mail.com", "password": "pass123", "licenseNumber": null, "specialty_id": null, "role_id": 1 },
