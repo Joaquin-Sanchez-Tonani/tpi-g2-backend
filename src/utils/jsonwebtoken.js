@@ -4,12 +4,13 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const jwtGenerator = (result) => {
-  const { id, name, lastName, role_id } = result;
+  const { id, name, lastName, role_id, email } = result;
 
   const payload = {
     id: id,
     name: name,
     lastName: lastName,
+    email: email,
     role_id: role_id,
   }
 

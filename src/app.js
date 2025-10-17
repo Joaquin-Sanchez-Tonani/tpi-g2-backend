@@ -12,6 +12,7 @@ import { times } from './utils/time.data.js';
 import { specialties } from './utils/specialties.data.js';
 import { users } from './utils/users.data.js';
 import { appointment } from './utils/appointment.data.js';
+import profileRouter from './routes/profile.routes.js';
 
 const app = express();
 app.use(express.json())
@@ -45,3 +46,4 @@ main();
 app.use("/auth", authRouter)
 app.use("/appointment", appointmentRouter)
 app.use("/dashboard", dashboardRouter)
+app.use("/profile", profileRouter)

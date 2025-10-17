@@ -9,5 +9,8 @@ Users.belongsTo(Roles, { foreignKey: "role_id" })
 Specialties.hasMany(Users, { foreignKey: "specialty_id"})
 Users.belongsTo(Specialties, { foreignKey: "specialty_id"})
 Times.hasMany(Appointments, { foreignKey: "time_id"})
-Appointments.belongsTo(Times, { foreignKey: "time_id"})
+Appointments.belongsTo(Users, { as: 'patient', foreignKey: 'patient_id' });
+Appointments.belongsTo(Users, { as: 'specialist', foreignKey: 'specialist_id' });
+Appointments.belongsTo(Times, { foreignKey: 'time_id' });
+
 export {Roles,Users,Specialties,Times,Appointments}

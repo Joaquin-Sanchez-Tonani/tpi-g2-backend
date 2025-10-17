@@ -41,7 +41,7 @@ async function Login(req, res) {
         }
 
         const token = jwtGenerator(user);
-        return res.status(200).json({ token, message: "Bienvenido", ok: true, user: {id: user.id,name: user.name, lastName: user.lastName, email: user.email}});
+        return res.status(200).json({ token, message: "Bienvenido", ok: true, user: {name: user.name, lastName: user.lastName, email: user.email}});
     } catch (error) {
         console.error("Error logging in:", error);
         return res.status(500).json({ message: "Error interno del servidor", ok: false });
@@ -95,8 +95,40 @@ async function PatchUser(req, res) {
     }
 }
 
+async function PatchUserProfile(req, res) {
+    const body = req.body;
+    try {
+        const updates = {};
+        if (body.name !== undefined) updates.name = body.name;
+        if (body.lastName !== undefined) updates.lastName = body.lastName;
+        if (body.email !== undefined) updates.email = body.email;
+
+        if (Object.values(updates).length === 0) return res.status(400).json({ message: "No hay información a modificar", ok: false })
+        const [modified] = await Users.update(updates, { where: { id: req.user.id } });
+        if (modified === 0) {
+            return res.status(404).json({ message: "Usuario no encontrado", ok: false });
+        }
+        return res.status(200).json({ message: "Usuario modificado correctamente", ok: true });
+    } catch (e) {
+        console.error("Error modifying user:", e);
+        return res.status(500).json({ message: "Error modificando usuario", ok: false });
+    }
+}
+
+async function UserData(req,res){
+    try{
+        const user = await Users.findOne({where: {email: req.user.email}})
+        if (!user) {
+            return res.status(401).json({ message: "Usuario inexistente", ok: false });
+        }
+        return res.status(200).json({ message: "Información recibída", ok: true, user: {name: user.name, lastName: user.lastName, email: user.email}});
+    }catch{
+
+    }
+}
+
 async function ValidateUser(req, res) {
     return res.status(200).json({ message: "Usuario permitido", ok: true });
 }
 
-export { Login, Register, GetUser, DeleteUser, PatchUser, ValidateUser };
+export { Login, Register, GetUser, DeleteUser, PatchUser, PatchUserProfile, UserData, ValidateUser };

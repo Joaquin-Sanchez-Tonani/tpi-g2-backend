@@ -7,6 +7,7 @@ export function CheckAdmin(req,res,next){
         tokenDecoded = jwtDecoded(req,res,token)
     }catch(error){
         console.log("Error:", error)
+        return res.status(403).json({message: "El token no se pudo decodear", ok: false})
     }
     const permission = tokenDecoded && tokenDecoded.role_id
     const necessary_level = 3
@@ -17,10 +18,9 @@ export function CheckAdmin(req,res,next){
 }
 
 
-export function isLogin(req, res) {
+export function isLogin(req, res, next) {
     try {
         const token = req.headers["authorization"]?.split(" ")[1];
-        console.log("TOKEN RECIBIDO:", token);
 
         if (!token) {
             return res.status(401).json({ message: "Usuario no logeado", ok: false });
@@ -32,10 +32,9 @@ export function isLogin(req, res) {
             return res.status(401).json({ message: "Token inválido", ok: false });
         }
 
-        req.user = decoded; // opcional, para usar info del usuario
-        return res.status(200).json({ message: "Permitido", ok: true });
-
+        req.user = decoded; 
     } catch (error) {
         return res.status(500).json({ message: "Error en servidor", ok: false });
     }
+    next()
 }
