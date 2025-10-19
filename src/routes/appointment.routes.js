@@ -13,6 +13,6 @@ appointmentRouter.get("/specialties", GetSpecialties);
 appointmentRouter.get("/specialists/:id", GetSpecialists)
 appointmentRouter.get("/busy", GetBusyAppointment)
 appointmentRouter.get("/times", GetTimes)
-appointmentRouter.post("/create",isLogin, CreateAppointment)
+appointmentRouter.post("/create", CreateAppointment)
 
 export default appointmentRouter;
