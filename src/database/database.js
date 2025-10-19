@@ -15,7 +15,6 @@ export const sequelize = new Sequelize('medical_clinic', 'postgres', 'suertudo',
 });
 
 
-
 // Servidor para desarrollo
 /*
 export const sequelize = new Sequelize('tgi-g2', 'consultor', 'SilkSong2025@@', {
