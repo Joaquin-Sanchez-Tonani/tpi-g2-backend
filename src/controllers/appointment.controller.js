@@ -36,18 +36,19 @@ async function GetBusyAppointment(req, res) {
 }
 
 async function CreateAppointment(req, res) {
-    const { date, time_id, specialist_id } = req.body
-    if (!date || !time_id || !specialist_id) return res.status(400).json({ message: "Faltan seleccionar datos", ok: false });
+    const { date, time_id, specialist_id, patient_id } = req.body
+    if (!date || !time_id || !specialist_id) return res.status(400).json({ message: "Faltan seleccionar datos", ok: false , body: req.user.id});
     try {
         const [data, isCreated] = await Appointments.findOrCreate({
             where: {
                 date: date,
                 time_id: time_id,
-                specialist_id: specialist_id
+                specialist_id: specialist_id,
+                patient_id: patient_id
             },
-            defaults: {
-                patient_id: req.user.id
-            }
+            // defaults: {
+            //     patient_id: req.user.id
+            // }
         })
         if (isCreated) return res.status(200).json({ message: "Turnos creado", ok: true, appointments: data })
         else return res.status(404).json({ message: "Turno existente", ok: false })
