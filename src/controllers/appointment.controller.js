@@ -46,9 +46,9 @@ async function CreateAppointment(req, res) {
                 specialist_id: specialist_id,
                 patient_id: patient_id
             },
-            // defaults: {
+            //  defaults: {
             //     patient_id: req.user.id
-            // }
+            //  }
         })
         if (isCreated) return res.status(200).json({ message: "Turnos creado", ok: true, appointments: data })
         else return res.status(404).json({ message: "Turno existente", ok: false })
@@ -71,12 +71,23 @@ async function GetAppointmentsForId(req, res) {
                 {
                     model: Users,
                     as: 'patient',
-                    attributes: ['name']
+                    attributes: ['name'],
+
                 },
                 {
                     model: Users,
                     as: 'specialist',
                     attributes: ['name']
+                },
+                {
+                    model: Users,
+                    as: 'specialist',
+                    attributes: ['lastName']
+                },
+                {
+                    model: Users,
+                    as: 'specialist',
+                    attributes: ['specialty_id']
                 },
                 {
                     model: Times,

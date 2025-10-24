@@ -65,7 +65,7 @@ export function isLogin(req, res, next) {
         }
 
         req.user = decoded; 
-    } catch (error) {
+    }}catch(error) {
         return res.status(500).json({ message: "Error en servidor", ok: false });
     }
     next()
