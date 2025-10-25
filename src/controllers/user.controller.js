@@ -1,6 +1,7 @@
 import { Users } from "../models/user.models.js";
 import { jwtGenerator } from "../utils/jsonwebtoken.js";
 import bs from "bcrypt";
+import { users } from "../utils/users.data.js";
 
 async function Register(req, res) {
     const { name, lastName, email, password } = req.body;
@@ -34,7 +35,9 @@ async function Login(req, res) {
         if (!user) {
             return res.status(401).json({ message: "Usuario inexistente", ok: false });
         }
-
+        if (user.isDisabled) {
+            return res.status(401).json({ message: "Usuario deshabilitado", ok: false });
+        }
         const validPassword = await bs.compare(password, user.password);
         if (!validPassword) {
             return res.status(401).json({ message: "Contraseña inválida", ok: false });
@@ -64,11 +67,13 @@ async function DeleteUser(req, res) {
         return res.status(403).json({ message: "No puedes borrarte a ti mismo", ok: false });
     }
     try {
-        const deleted = await Users.destroy({ where: { id }, force: true });
-        if (!deleted) {
-            return res.status(404).json({ message: "Usuario no encontrado", ok: false });
-        }
-        return res.status(200).json({ message: "Usuario eliminado correctamente", ok: true });
+        const user = await Users.findOne({ where: { id: id } });
+
+if (user) {
+  user.isDisabled = !user.isDisabled; 
+  await user.save();
+}
+        return res.status(200).json({ message: "Usuario deshabilitado correctamente", ok: true });
     } catch (e) {
         console.error("Error deleting user:", e);
         return res.status(500).json({ message: "Error interno del servidor", ok: false });

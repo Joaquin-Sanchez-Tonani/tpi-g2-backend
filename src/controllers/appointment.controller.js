@@ -39,17 +39,22 @@ async function CreateAppointment(req, res) {
     const { date, time_id, specialist_id } = req.body
     if (!date || !time_id || !specialist_id) return res.status(400).json({ message: "Faltan seleccionar datos", ok: false });
     try {
-        const [data, isCreated] = await Appointments.findOrCreate({
-            where: {
-                date: date,
-                time_id: time_id,
-                specialist_id: specialist_id
-            },
-            defaults: {
-                patient_id: req.user.id
-            }
-        })
-        if (isCreated) return res.status(200).json({ message: "Turnos creado", ok: true, appointments: data })
+        const specialistTaken = await Appointments.findOne({ where: { date, time_id, specialist_id } })
+        if (specialistTaken) {
+            return res.status(400).json({ message: "Turno ya reservado con ese especialista", ok: false, error: 1 });
+        }
+        const patientTaken = await Appointments.findOne({ where: { date, time_id, patient_id: req.user.id } });
+        if (patientTaken) {
+            return res.status(400).json({ message: "Ya tenés un turno en ese horario", ok: false, error: 2 });
+        }
+
+        const appointment = await Appointments.create({
+            date,
+            time_id,
+            specialist_id,
+            patient_id: req.user.id
+        });
+        if (appointment) return res.status(200).json({ message: "Turnos creado", ok: true, appointments: appointment })
         else return res.status(404).json({ message: "Turno existente", ok: false })
     } catch (e) {
         console.error("CreateAppointment error:", e);
@@ -62,24 +67,23 @@ async function GetAppointmentsForId(req, res) {
         const appointments = await Appointments.findAll({
             where: {
                 [Op.or]: [
-                    { patient_id: req.user.id },
-                    { specialist_id: req.user.id }
+                    { patient_id: req.user.id }
                 ]
             },
             include: [
                 {
                     model: Users,
                     as: 'patient',
-                    attributes: ['name']
+                    attributes: ['name', 'lastName']
                 },
                 {
                     model: Users,
                     as: 'specialist',
-                    attributes: ['name']
+                    attributes: ['name', 'lastName']
                 },
                 {
                     model: Times,
-                    attributes: ['time'] 
+                    attributes: ['time']
                 }
             ]
         }

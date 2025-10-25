@@ -32,6 +32,11 @@ export const Users = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        isDisabled: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false  
+        },
         specialty_id: { 
             type: DataTypes.INTEGER,
             allowNull: true,
