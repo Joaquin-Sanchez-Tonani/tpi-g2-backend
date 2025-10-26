@@ -10,6 +10,23 @@ export function CheckAdmin(req,res,next){
         return res.status(403).json({message: "El token no se pudo decodear", ok: false})
     }
     const permission = tokenDecoded && tokenDecoded.role_id
+    const necessary_level = 4
+    if(permission < necessary_level){
+        return res.status(403).json({message: "Usuario no autorizado", ok: false})
+    }
+    next()
+}
+
+export function CheckOwner(req,res,next){
+    var tokenDecoded = null
+    try{
+        const token = req.headers["authorization"]?.split(" ")[1];
+        tokenDecoded = jwtDecoded(req,res,token)
+    }catch(error){
+        console.log("Error:", error)
+        return res.status(403).json({message: "El token no se pudo decodear", ok: false})
+    }
+    const permission = tokenDecoded && tokenDecoded.role_id
     const necessary_level = 3
     if(permission < necessary_level){
         return res.status(403).json({message: "Usuario no autorizado", ok: false})

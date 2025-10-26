@@ -64,7 +64,7 @@ async function GetUser(req, res) {
 async function DeleteUser(req, res) {
     const id = req.params.id;
     if (id == req.user.id) {
-        return res.status(403).json({ message: "No puedes borrarte a ti mismo", ok: false });
+        return res.status(403).json({ message: "No puedes deshabilitarte a ti mismo", ok: false });
     }
     try {
         const user = await Users.findOne({ where: { id: id } });
@@ -126,7 +126,7 @@ async function UserData(req,res){
         if (!user) {
             return res.status(401).json({ message: "Usuario inexistente", ok: false });
         }
-        return res.status(200).json({ message: "Información recibída", ok: true, user: {name: user.name, lastName: user.lastName, email: user.email}});
+        return res.status(200).json({ message: "Información recibída", ok: true, user: {name: user.name, lastName: user.lastName, role_id: user.role_id}});
     }catch{
 
     }

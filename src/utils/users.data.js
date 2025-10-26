@@ -59,9 +59,10 @@ export const users = [
     { "name": "Raúl", "lastName": "Herrero", "email": "raul.herrero@mail.com", "password": "pass123", "licenseNumber": 1004, "specialty_id": 10, "role_id": 2 },
     { "name": "Mónica", "lastName": "Sáenz", "email": "monica.saenz@mail.com", "password": "pass123", "licenseNumber": 1005, "specialty_id": 10, "role_id": 2 },
 
-    { "name": "Admin1", "lastName": "Control", "email": "admin1@mail.com", "password": "admin123", "licenseNumber": null, "specialty_id": null, "role_id": 3 },
-    { "name": "Admin2", "lastName": "Control", "email": "admin2@mail.com", "password": "admin123", "licenseNumber": null, "specialty_id": null, "role_id": 3 },
-    { "name": "Admin3", "lastName": "Control", "email": "admin3@mail.com", "password": "admin123", "licenseNumber": null, "specialty_id": null, "role_id": 3 },
+    { "name": "Admin1", "lastName": "Control", "email": "admin1@mail.com", "password": "admin123", "licenseNumber": null, "specialty_id": null, "role_id": 4 },
+    { "name": "Admin2", "lastName": "Control", "email": "admin2@mail.com", "password": "admin123", "licenseNumber": null, "specialty_id": null, "role_id": 4 },
+    { "name": "Admin3", "lastName": "Control", "email": "admin3@mail.com", "password": "admin123", "licenseNumber": null, "specialty_id": null, "role_id": 4 },
+    { "name": "Owner", "lastName": "asd", "email": "owner@mail.com", "password": "owner123", "licenseNumber": null, "specialty_id": null, "role_id": 3 },
 
     { "name": "Laura", "lastName": "Sánchez", "email": "laura.sanchez@mail.com", "password": "pass123", "licenseNumber": null, "specialty_id": null, "role_id": 1 },
     { "name": "Fernando", "lastName": "Gil", "email": "fernando.gil@mail.com", "password": "pass123", "licenseNumber": null, "specialty_id": null, "role_id": 1 },

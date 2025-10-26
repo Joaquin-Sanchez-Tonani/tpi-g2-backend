@@ -67,7 +67,8 @@ async function GetAppointmentsForId(req, res) {
         const appointments = await Appointments.findAll({
             where: {
                 [Op.or]: [
-                    { patient_id: req.user.id }
+                    { patient_id: req.user.id },
+                    { specialist_id: req.user.id }
                 ]
             },
             include: [

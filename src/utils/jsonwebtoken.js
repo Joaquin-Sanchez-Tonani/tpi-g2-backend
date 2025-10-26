@@ -21,7 +21,7 @@ const jwtGenerator = (result) => {
 const jwtDecoded = (req,res,token) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-     req.user = decoded
+    req.user = decoded
     return decoded;
   } catch (err) {
     return res.status(403).json({message: "Token inválido", ok: false})
