@@ -126,7 +126,7 @@ async function UserData(req,res){
         if (!user) {
             return res.status(401).json({ message: "Usuario inexistente", ok: false });
         }
-        return res.status(200).json({ message: "Información recibída", ok: true, user: {name: user.name, lastName: user.lastName, role_id: user.role_id}});
+        return res.status(200).json({ message: "Información recibída", ok: true, user: {id: user.id,name: user.name, lastName: user.lastName, role_id: user.role_id}});
     }catch{
 
     }

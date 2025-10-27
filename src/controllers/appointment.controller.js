@@ -97,4 +97,26 @@ async function GetAppointmentsForId(req, res) {
 
 }
 
-export { GetTimes, GetBusyAppointment, CreateAppointment, GetAppointmentsForId }
+const deleteAppointment = async (req, res) => {
+    try {
+        const userId = req.user.id; 
+        const { id } = req.params;  
+        const appointment = await Appointments.findOne({
+            where: {
+                id,
+                patient_id: userId
+            }
+        });
+        if (!appointment) {
+            return res.status(404).json({ message: "No encontrado o autorizado", ok:false });
+        }
+        appointment.status = false;
+        await appointment.save();
+        return res.json({ message: "Turno cancelado correctamente", ok:true });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error interno del servidor", ok:false });
+    }
+};
+
+export { GetTimes, GetBusyAppointment, CreateAppointment, GetAppointmentsForId, deleteAppointment }

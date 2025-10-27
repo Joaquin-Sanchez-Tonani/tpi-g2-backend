@@ -14,6 +14,11 @@ export const Appointments = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false
         },
+        status: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true
+        },
         time_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
