@@ -38,6 +38,7 @@ async function GetBusyAppointment(req, res) {
 async function CreateAppointment(req, res) {
     const { date, time_id, specialist_id } = req.body
     if (!date || !time_id || !specialist_id) return res.status(400).json({ message: "Faltan seleccionar datos", ok: false });
+    if (specialist_id === req.user.id) return res.status(400).json({ message: "No podes pedir turno con vos mismo", ok: false });
     try {
         const specialistTaken = await Appointments.findOne({ where: { date, time_id, specialist_id } })
         if (specialistTaken) {
